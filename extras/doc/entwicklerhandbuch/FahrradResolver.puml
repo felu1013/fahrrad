@@ -1,0 +1,87 @@
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/graphql {
+  class "function Resolver(): ClassDecorator" as Resolver
+  hide Resolver circle
+
+  class "function UseGuards(): ClassDecorator | MethodDecorator" as UseGuards
+  hide UseGuards circle
+
+  class "function UseInterceptors(): ClassDecorator | MethodDecorator" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "function Query(): MethodDecorator" as Query
+  hide Query circle
+
+  class "function Mutation(): MethodDecorator" as Mutation
+  hide Mutation circle
+
+  class "function Args(): ParameterDecorator" as Args
+  hide Args circle
+
+  Resolver -[hidden]down-> UseGuards
+  UseGuards -[hidden]down-> UseInterceptors
+  UseInterceptors -[hidden]down-> Query
+  Query -[hidden]down-> Mutation
+  Mutation -[hidden]down-> Args
+}
+
+package security.auth {
+  enum Role {
+    ADMIN
+    MITARBEITER
+    ABTEILUNGSLEITER
+    KUNDE
+  }
+
+  class "const Roles = (...roles: Role[]) => SetMetadata()" as Roles
+  hide Roles circle
+
+  Roles ..> Role
+}
+
+package fahrrad #DDDDDD {
+  package entity #FFFFFF {
+    class Fahrrad <<entity>>
+  }
+
+  package service #FFFFFF {
+    class FahrradService << control >>
+  }
+
+  class "type FahrradDTO = Fahrrad & { id?: string; version?: number; }" as FahrradDTO
+  hide FahrradDTO circle
+
+  FahrradResolver o-down-> "1" FahrradService : service
+  FahrradResolver ..> Fahrrad
+
+  FahrradResolver .up.> Resolver
+  FahrradResolver .up.> UseGuards
+  FahrradResolver .up.> UseInterceptors
+  FahrradResolver .up.> Query
+  FahrradResolver .up.> Mutation
+  FahrradResolver .up.> Args
+
+  FahrradResolver .up.> Roles
+  FahrradResolver .up.> Role
+
+  FahrradResolver ..> FahrradDTO
+
+  FahrradResolver .up.> Promise
+
+  class FahrradResolver << control >> << @Resolver() >> << @UseGuards() >> << @UseInterceptors() >> {
+    + @Query async findById(@Args() id: string): Promise<FahrradDTO>
+    + @Query async find(@Args() modell: string |undefined): Promise<FahrradDTO[]>
+    + @Mutation @Roles() async create(@Args() fahrrad: Fahrrad): Promise<string>
+    + @Mutation @Roles() async update(@Args() fahrrad: FahrradDTO): Promise<number>
+    + @Mutation @Roles() async delete(@Args() id: string): Promise<boolean>
+  }
+}
+
+hide empty members
+
+@enduml

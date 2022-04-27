@@ -1,0 +1,53 @@
+//
+// N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
+//
+
+// siehe auch https://studio.apollographql.com/sandbox/explorer
+
+### Suche id, modell, art und version von allen Buechern
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+{
+  fahrraeder {
+    id
+    modell
+    art
+    version
+  }
+}
+
+### Suche model, art, gewicht  und version von einem Fahrrad mit vorhandener Fahrrad-ID
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID! = "000000000000000000000001") {
+  fahrrad(id: $id) {
+    modell
+    art
+    gewicht
+    version
+  }
+}
+
+{
+  "id": "000000000000000000000001"
+}
+
+### Suche modell von einem Fahrrad mit nicht-vorhandener Fahrrad-ID
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query ($id: ID! = "999999999999999999999999") {
+  fahrrad(id: $id) {
+    modell
+  }
+}
+
+{
+  "id": "999999999999999999999999"
+}
+

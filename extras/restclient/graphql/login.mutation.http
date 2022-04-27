@@ -1,0 +1,39 @@
+//
+// N e t z w e r k   -  V e r b i n d u n g   n o t w e n d i g
+//
+
+### Einloggen
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation ($username: String = "admin", $password: String = "p") {
+  login(username: $username, password: $password) {
+    token
+    expiresIn
+    roles
+  }
+}
+
+{
+  "username": "admin",
+  "password": "p"
+}
+
+### Einloggen mit falschem Passwort
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation ($username: String = "admin", $password: String = "FALSCH") {
+  login(username: $username, password: $password) {
+    token
+    expiresIn
+    roles
+  }
+}
+
+{
+  "username": "admin",
+  "password": "FALSCH"
+}

@@ -1,0 +1,45 @@
+' Preview durch <Alt>d
+
+@startuml Entity
+
+package @nestjs/mongoose {
+  class "function Schema() : PropertyDecorator" as Schema
+  class "function Prop() : PropertyDecorator" as Prop
+}
+
+package mongoose {
+  class Document
+}
+
+package fahrrad.entity {
+  class "type FahrradDocument = Fahrrad & Document<>" as FahrradDocument
+  hide FahrradDocument circle
+
+  FahrradDocument ..> Fahrrad
+  FahrradDocument .right.> Document
+
+  class Fahrrad
+
+  Fahrrad .right.> Schema
+  Fahrrad .right.> Prop
+
+  Fahrrad ..> FahrradArt
+
+  enum FahrradArt {
+    MOUNTAINBIKE
+    RENNRAD
+    TREKKINGRAD
+  }
+
+  class Fahrrad <<entity>> <<@Schema>> {
+    + @Prop modell: string
+    + @Prop gewicht?: number
+    + @Prop art?: FahrradArt
+    + @Prop marke: string
+    + @Prop preis: number
+  }
+}
+
+hide empty members
+
+@enduml

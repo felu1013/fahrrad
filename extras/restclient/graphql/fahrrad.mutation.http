@@ -1,0 +1,121 @@
+//
+// N e t z w e r k   -   V e r b i n d u n g   n o t w e n d i g
+//
+
+### Einloggen in der Rolle "admin", "mitarbeiter" und "kunde"
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "admin", password: "p") { token expiresIn roles }
+}
+
+### Einloggen in der Rolle "mitarbeiter" und "kunde"
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "alfred.alpha", password: "p") { token expiresIn roles }
+}
+
+### Einloggen in der Rolle "kunde"
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "dirk.delta", password: "p") { token expiresIn roles }
+}
+
+### Einloggen mit falschem Passwort
+// @name login
+POST {{graphQlUrl}}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  login(username: "admin", password: "FALSCH") { token expiresIn roles }
+}
+
+### Neues Fahrrad anlegen
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  create(
+    modell: "Mountainbike",
+    gewicht: 10.4,
+    art: MOUNTAINBIKE,
+    marke: "Cube",
+    preis: 3000,
+  )
+}
+
+### Fahrrad mit falschen Daten anlegen
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  create(
+    modell: "1234",
+    gewicht: -3
+    art: BLabla,
+    marke: "cube",
+    preis: 0,
+    )
+}
+
+### Fahrrad mit bereits vorhandenem Modell anlegen 
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  create(
+    modell: "Ams",
+    gewicht: 10,
+    art: MOUNTAINBIKE,
+    marke: "Cube",
+    preis: 4000,
+    )
+}
+
+### Fahrrad aktualisieren 
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  update(
+    id : "000000000000000000000003",
+    version: 0,
+    fahrrad: {
+        modell: "Fahrrad1",
+        gewicht: 15,
+        art: RENNRAD,
+        marke: "Fahrradmarke",
+        preis: 3500,
+    }
+  )
+}
+
+### Vorhandenes Fahrrad loeschen
+POST {{graphQlUrl}}
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.$.data.login.token}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+  delete(id: "000000000000000000000004")
+}

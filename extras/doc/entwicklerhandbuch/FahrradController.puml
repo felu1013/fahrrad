@@ -1,0 +1,128 @@
+' Preview durch <Alt>d
+
+@startuml Controller-Klasse
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "function Controller(): ClassDecorator" as Controller
+  hide Controller circle
+
+  class "function UseGuards(): ClassDecorator | MethodDecorator" as UseGuards
+  hide UseGuards circle
+
+  class "function UseInterceptors(): ClassDecorator | MethodDecorator" as UseInterceptors
+  hide UseInterceptors circle
+
+  class "function Get(): MethodDecorator" as Get
+  hide Get circle
+
+  class "function Post(): MethodDecorator" as Post
+  hide Post circle
+
+  class "function Put(): MethodDecorator" as Put
+  hide Put circle
+
+  class "function Delete(): MethodDecorator" as Delete
+  hide Delete circle
+
+  class "function Req(): ParameterDecorator" as Req
+  hide Req circle
+
+  class "function Res(): ParameterDecorator" as Res
+  hide Res circle
+
+  class "function Param(): ParameterDecorator" as Param
+  hide Param circle
+
+  class "function Query(): ParameterDecorator" as Query
+  hide Query circle
+
+  class "function Body(): ParameterDecorator" as Body
+  hide Body circle
+
+  class "function Headers(): ParameterDecorator" as Headers
+  hide Headers circle
+
+  Controller -[hidden]down-> UseGuards
+  UseGuards -[hidden]down-> UseInterceptors
+  UseInterceptors -[hidden]down-> Get
+  Get -[hidden]down-> Post
+  Post -[hidden]down-> Put
+  Put -[hidden]down-> Delete
+  Delete -[hidden]down-> Req
+  Req -[hidden]down-> Res
+  Res -[hidden]down-> Param
+  Param -[hidden]down-> Query
+  Query -[hidden]down-> Body
+  Body -[hidden]down-> Headers
+}
+
+package express {
+  class Request
+  class Response
+}
+
+package security.auth {
+  enum Role {
+    ADMIN
+    MITARBEITER
+    ABTEILUNGSLEITER
+    KUNDE
+  }
+
+  class "const Roles = (...roles: Role[]) => SetMetadata()" as Roles
+  hide Roles circle
+
+  Roles ..> Role
+}
+
+package fahrrad #DDDDDD {
+  package entity #FFFFFF {
+    class Fahrrad <<entity>>
+  }
+
+  package service #FFFFFF {
+    class FahrradService << control >>
+  }
+
+  FahrradQuery --|> Fahrrad
+
+  FahrradController o-down-> "1" FahrradService : service
+  FahrradController ..> Fahrrad
+
+  FahrradController .up.> Controller
+  FahrradController .up.> UseGuards
+  FahrradController .up.> UseInterceptors
+  FahrradController .up.> Get
+  FahrradController .up.> Post
+  FahrradController .up.> Put
+  FahrradController .up.> Delete
+  FahrradController .up.> Req
+  FahrradController .up.> Res
+  FahrradController .up.> Param
+  FahrradController .up.> Query
+  FahrradController .up.> Body
+  FahrradController .up.> Headers
+
+  FahrradController .up.> Roles
+  FahrradController .up.> Role
+
+  FahrradController ..> FahrradQuery
+
+  FahrradController ..> Request
+  FahrradController ..> Response
+  FahrradController ..> Promise
+
+  class FahrradController << control >> << @Controller() >> << @UseGuards() >> << @UseInterceptors() >> {
+    + @Get async findById(@Param() id: string, @Req() req: Request, @Headers() version: string, @Res() res: Response): Promise<void>
+    + @Get async find(@Query() query: FahrradQuery, @Req() req: Request,  @Res() res: Response): Promise<void>
+    + @Post @Roles() async create(@Body() fahrrad: Fahrrad, @Req() req: Request,  @Res() res: Response): Promise<void>
+    + @Put @Roles() async update(@Body() fahrrad: Fahrrad, @Param() id: string, @Headers() version: string, @Res() res: Response): Promise<void>
+    + @Delete @Roles() async delete(@Param() id: string, @Res() res: Response): Promise<void>
+  }
+}
+
+hide empty members
+
+@enduml

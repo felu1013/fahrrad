@@ -1,0 +1,47 @@
+# Funktionen, um Fahrräder zu suchen
+type Query {
+    fahrraeder(modell: String): [Fahrrad]
+
+    fahrrad(id: ID!): Fahrrad
+}
+
+# Funktionen, um Fahrräder anzulegen, zu aktualisieren oder zu löschen
+type Mutation {
+  create(
+    modell: String!
+    gewicht: Float
+    art: Art
+    marke: String
+    preis: Float
+  ): String
+
+  update(id: ID, version: Int, fahrrad: FahrradUpdateInput!): Int
+
+  delete(id: ID!): Boolean
+}
+
+# Datenschema eines Fahrrads, das empfangen wird
+type Fahrrad {
+  id: ID
+  version: Int
+  modell: String
+  gewicht: Float
+  art: Art
+  marke: String
+  preis: Float
+}
+
+# Enum Typ für die Art eines Fahrrads
+enum Art {
+  MOUNTAINBIKE
+  RENNRAD
+  TREKKINGRAD
+}
+
+input FahrradUpdateInput {
+  modell: String!
+  gewicht: Float
+  art: Art
+  marke: String
+  preis: Float
+}

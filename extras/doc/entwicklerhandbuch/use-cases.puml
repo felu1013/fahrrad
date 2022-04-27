@@ -1,0 +1,23 @@
+' Preview durch <Alt>d
+
+@startuml Use Cases
+
+actor Gast
+actor Admin
+actor Kunde
+
+rectangle kunde {
+    Gast --> (Fahrrad suchen)
+    Admin --> (Fahrrad suchen)
+    Admin --> (Fahrrad anlegen)
+    Admin --> (Fahrrad ändern)
+    Admin --> (Fahrrad löschen)
+    Admin --> (Datei hochladen)
+    Admin --> (Datei herunterladen)
+    Kunde --> (Fahrrad suchen)
+    Kunde --> (Fahrrad anlegen)
+    Kunde --> (Fahrrad ändern)
+    Kunde --> (Datei herunterladen)
+}
+
+@enduml

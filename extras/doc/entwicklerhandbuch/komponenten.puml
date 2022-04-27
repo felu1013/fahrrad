@@ -1,0 +1,68 @@
+' Preview durch <Alt>d
+
+@startuml Komponenten
+
+left to right direction
+
+actor RESTClient
+actor GraphQLClient
+
+node "Nest" {
+  [RequestLoggerMiddleware]
+
+  [FahrradController]
+  [FahrradResolver]
+  [FahrradFileController]
+
+  [FahrradService]
+  [FahrradFileService]
+
+  [Fahrrad]
+
+  [MailService]
+}
+
+
+cloud {
+    [Mongoose]
+}
+
+cloud {
+    [MongoDB\nNative Driver]
+}
+
+cloud {
+    [nodemailer]
+}
+
+database "acme (MongoDB)" {
+    [Collection Fahrrad]
+    [GridFS]
+}
+
+node {
+    [Mailserver]
+}
+
+RESTClient ~~> [RequestLoggerMiddleware]
+GraphQLClient ~~> [RequestLoggerMiddleware]
+
+[RequestLoggerMiddleware] ~~> [FahrradController]
+[RequestLoggerMiddleware] ~~> [FahrradResolver]
+[RequestLoggerMiddleware] ~~> [FahrradFileController]
+
+[FahrradController] --> [FahrradService]
+[FahrradResolver] --> [FahrradService]
+[FahrradFileController] --> [FahrradFileService]
+[FahrradService] ..> [Fahrrad]
+
+[Fahrrad] ~~> [Mongoose]
+[FahrradFileService] ~~> [MongoDB\nNative Driver]
+[Mongoose] ~~> [Collection Fahrrad]
+[MongoDB\nNative Driver] ~~> [GridFS]
+
+[FahrradService] --> [MailService]
+[MailService] --> [nodemailer]
+[nodemailer] ~~> [Mailserver]
+
+@enduml

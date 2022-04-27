@@ -1,0 +1,60 @@
+' Preview durch <Alt>d
+
+@startuml Anwendungskern
+
+interface Promise<T>
+
+package @nestjs/common {
+  class "function Injectable(): ClassDecorator" as Injectable
+  hide Injectable circle
+}
+
+package mongoose {
+  class FilterQuery
+  hide FilterQuery circle
+}
+
+package mail {
+  class MailService
+}
+
+package fahrrad {
+  package entity {
+    class Fahrrad
+    class FahrradDocument
+
+  }
+
+  package service #DDDDDD {
+    class FahrradInvalid
+    class ModellExists
+    class VersionInvalid
+    class VersionOutdated
+
+    FahrradService .up.> Promise
+    FahrradService ..> Fahrrad
+    FahrradService ..> FahrradDocument
+    FahrradService .left.> FahrradValidationService
+    FahrradService ..> FahrradInvalid
+    FahrradService ..> ModellExists
+    FahrradService ..> VersionInvalid
+    FahrradService ..> VersionOutdated
+    FahrradService .right.> MailService
+    FahrradService .up.> FilterQuery
+    FahrradService .up.> Injectable
+
+    class FahrradService << control >> <<@Injectable()>> {
+      + async findById(id: string): Promise<FahrradDocument | undefined>
+      + async find(query?: FilterQuery<FahrradDocument>): Promise<FahrradDocument[]>
+      + async create(fahrrad: Fahrrad): Promise<string|FahrradInvalid|ModellExists>
+      + async update(fahrrad: Fahrrad, id: string, version: string): Promise<number|FahrradInvalid|ModellExists|VersionInvalid|VersionOutdated>
+      + async delete(id: string): Promise<boolean>
+    }
+
+    VersionOutdated -[hidden]-> FahrradDocument
+  }
+}
+
+hide empty members
+
+@enduml
