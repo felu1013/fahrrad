@@ -13,10 +13,10 @@
       "fileUrl": "http://localhost:3000/file"
     },
     "heroku": {
-      "restUrl": "https://protected-eyrie-38026.herokuapp.com/api",
-      "authUrl": "https://protected-eyrie-38026.herokuapp.com/auth",
-      "graphQlUrl": "https://protected-eyrie-38026.herokuapp.com/graphql",
-      "fileUrl": "https://protected-eyrie-38026.herokuapp.com:3000/file"
+      "restUrl": "https://pacific-tor-47773.herokuapp.com//api",
+      "authUrl": "https://pacific-tor-47773.herokuapp.com//auth",
+      "graphQlUrl": "https://pacific-tor-47773.herokuapp.com//graphql",
+      "fileUrl": "https://pacific-tor-47773.herokuapp.com//file"
     }
   }
 }
