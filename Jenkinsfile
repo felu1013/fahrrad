@@ -64,7 +64,7 @@ pipeline {
                 // https://www.jenkins.io/doc/pipeline/steps/git
                 // "named arguments" statt Funktionsaufruf mit Klammern
                 // duch "docker compose" wird /git-repository auf "." in Windows abgebildet
-                git url: 'file:///git-repository/beispiel', branch: 'main', poll: true
+                git url: 'file://git-repository/beispiel', branch: 'main', poll: true
             }
         }
 
