@@ -4,7 +4,7 @@
 
 // siehe auch https://studio.apollographql.com/sandbox/explorer
 
-### Suche id, modell, art und version von allen Buechern
+### Suche id, modell, art und version von allen Fahrraedern
 POST {{graphQlUrl}}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
